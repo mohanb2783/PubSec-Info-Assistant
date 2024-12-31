@@ -4,6 +4,7 @@
 import { array, func } from "prop-types";
 import React from "react";
 import styles from "./drop-zone.module.css";
+import upload from '../../assets/upload.svg';
 
 const Banner = ({ onClick, onDrop }: {onClick: any, onDrop: any}) => {
   const handleDragOver = (ev: any) => {
@@ -25,8 +26,9 @@ const Banner = ({ onClick, onDrop }: {onClick: any, onDrop: any}) => {
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
-      <span className={styles.banner_text}>Click to Add csv file</span>
-      <span className={styles.banner_text}>Or</span>
+      {/* <span className={styles.banner_text}>Click to Add csv file</span>
+      <span className={styles.banner_text}>Or</span> */}
+      <img src={upload} className={styles.uploadImg} alt="Drop files here" />
       <span className={styles.banner_text}>Drag and Drop csv file here</span>
     </div>
   );

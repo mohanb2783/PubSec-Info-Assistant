@@ -22,11 +22,11 @@ export const RAIPanel = ({approach, chatMode, onAdjustClick, onRegenerateClick, 
     return (
         <div className={styles.adjustInputContainer}>
             <div className={styles.adjustInput} onClick={onAdjustClick}>
-                <Options16Filled primaryFill="rgba(133, 133, 133, 1)" />
+                <Options16Filled primaryFill="navy" />
                 <span className={styles.adjustInputText}>Adjust</span>
             </div>
             <div className={styles.adjustInput} onClick={onRegenerateClick}>
-                <ArrowSync16Filled primaryFill="rgba(133, 133, 133, 1)" />
+                <ArrowSync16Filled primaryFill="navy" />
                 <span className={styles.adjustInputText}>Regenerate</span>
             </div>
             {(approach == Approaches.ChatWebRetrieveRead && chatMode == ChatMode.WorkPlusWeb) &&

@@ -24,7 +24,7 @@ export const TagPickerInline = ({allowNewTags, onSelectedTagsChange, preSelected
 
     const pickerId = useId('tag-inline-picker');
     const tooltipId = useId('tagpicker-tooltip');
-    const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
+    const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block', marginTop:'1rem' } };
     const newItem = mergeStyles({ color: '#f00', background: '#ddf', padding: '10px' });
     const existingItem = mergeStyles({ color: '#222', padding: '10px' });
 
@@ -129,7 +129,7 @@ export const TagPickerInline = ({allowNewTags, onSelectedTagsChange, preSelected
       <div  className={hide? styles.hide : styles.tagArea}>
         <div className={styles.tagSelection}>
           <div className={allowAddNew ? styles.rootClass : styles.rootClassFilter}>
-            <label htmlFor={pickerId}>Tags</label>
+            <label htmlFor={pickerId}>Meta Data</label>
             <TagPicker
                 className={styles.tagPicker}
                 removeButtonAriaLabel="Remove"

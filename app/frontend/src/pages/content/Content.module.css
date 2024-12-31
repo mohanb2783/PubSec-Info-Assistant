@@ -49,6 +49,13 @@
     font-size: calc(10px + 2vmin);
   }
 
+
+  .supportedFilesTypewriter {
+    font-size: 2rem;
+ 
+    color: navy;
+    }
+
   .contentArea {
     width: 100%;
     margin-top: 10px;
@@ -61,6 +68,7 @@
     flex-direction: column;
     justify-content: center;
     width: 100%;
+    margin-left: 1rem;
   }
   
 .fileIconImg {
@@ -83,12 +91,46 @@
   padding-bottom: 50px;
   padding-top: 30px;
 }
+.supportedFilesList {
+  text-align: center;
+  font-size: 14px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin: 2rem 0rem;
+  /* border-radius: 30px; */
+  justify-content: space-between;
+}
+
 
 .EmptyObjectivesListItem {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 200px;
+  width: 400px;
+  gap: 10px;
+  /* color: red; */
+  margin: 1rem 0rem;
+ 
+}
+
+.FolderAndFilePicker{
+  display: flex;
+  
+  align-items: center;
+  gap: 2rem;
+  width: 80vw;
+}
+
+.supportedFiles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 15rem;
+  background-color: white;
+  padding: 10px;
+  border-radius: 20px;
+ 
 }
 
 .EmptyObjectivesListItemText {
@@ -97,8 +139,9 @@
 }
 
 .EmptyStateTitle {
+  color: navy;
   font-size: 2rem;
-  font-weight: 600;
+  font-weight: 800;
   margin-top: 0;
   margin-bottom: 10px;
 }

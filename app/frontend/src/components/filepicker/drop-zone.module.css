@@ -7,26 +7,35 @@
     align-items: center;
     justify-content: center;
     width: 100%;
+    
   }
   
   .banner_text {
-    font-size: 1.5rem;
+    font-size: 15px;
     color: #929090;
     display: block;
+    color: navy;
     margin: 0.5rem 0;
   }
   
+  .uploadImg{
+    width: 12rem;
+
+  }
+
   .banner {
     background-color: #fafafa;
     width: 100%;
-    border: 4px dashed #969595;
-    height: 200px;
+    border: 4px #969595;
+    padding: 3rem;
+    border-radius: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-bottom: 1rem;
     cursor: pointer;
+    height: 25vh;
   }
   
   .input {

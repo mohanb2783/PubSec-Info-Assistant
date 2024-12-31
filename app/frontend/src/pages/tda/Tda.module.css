@@ -69,28 +69,45 @@
     font-weight: bold; /* Makes the title bold */
 }
    .selectedButton {
-    color: #FF8C00 !important; /* Dark orange text */
+    color: white !important; /* Dark orange text */
     border-color: #FF8C00 !important; /* Dark orange border */
 }
+
+.exampleSuggestions{
+    margin: 2rem 0rem;
+    
+}
+.exampleSuggestionsHeading{
+    font-weight: bold;
+    color: navy;
+    
+}
+
 .inputLabel {
     font-size: 14px;
     color: #333;
     margin-bottom: 5px;
 }
 .inputField {
-    background-color: #cbcbcba6; /* Lighter grey */
+    background-color: white; /* Lighter grey */
     border: none; /* Removes border */
     margin-bottom: 10px; /* Same as button margin bottom */
     width: 100%;
+    height: 5rem;
     box-sizing: border-box;
     border-radius: 10px;
     padding: 10px;
+}
+.inputField:focus{
+    outline: none;
+    border:2px solid navy
+    
 }
 .centeredContainer {
     display: flex;
     flex-direction: column;
     align-items: center !important; /* Aligns items to the left */
-    border: 1px solid lightgrey;
+    /* border: 1px solid lightgrey; */
     border-radius: 10px;
     padding: 20px;
     margin: auto;
@@ -104,19 +121,40 @@
 }
 .buttonContainer {
     display: flex;
-    flex-direction: column;
+    flex-direction:row;
+    justify-content: center;
+    gap: 10px;
     border-radius: 20px; /* Rounds the corners of the buttons */
     width: auto;
     align-items: flex-start;
 }
 
+.analysisButtons{
+    color: white;
+    background: navy;
+    padding: 10px 14px;
+    width: auto; /* Makes the button as wide as its content */
+    /* Removes background color */
+    /* Optional: Adds some space between the buttons */
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    transition: all 0.1s ease-in;
+}
+.analysisButtons:hover{
+   color: navy;
+   background-color: white;
+
+}
+
 .buttonContainer button {
     margin-bottom: 10px; 
-    color: grey;
-    background-color: transparent;
+    color: white;
+    background: navy;
     width: auto; /* Makes the button as wide as its content */
     white-space: nowrap; /* Removes background color */
     /* Optional: Adds some space between the buttons */
+    /* border-radius: 20px; */
 }
 .container {
     flex: 1;
@@ -149,6 +187,7 @@
 }
 
 .chatEmptyStateTitle {
+    color: navy;
     font-size: 4rem;
     font-weight: 600;
     margin-top: 0;
@@ -251,7 +290,7 @@
 .loadingLogo {
     font-size: 28px;
 }
-
+inputField
 .commandsContainer {
     display: flex;
     align-self: flex-end;

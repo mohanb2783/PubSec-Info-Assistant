@@ -96,6 +96,7 @@
   padding-top: 10px; /* Add 20px padding on the top */
 }
 
+
 .divSpacing {
   margin: 0px; /* Adjust as needed */
 }
@@ -105,8 +106,9 @@
 }
 
 .refreshtext {
-  font-size: 0.8em; /* Smaller text size, adjust as needed */
+  font-size: 0.8em;
+  color: navy; /* Smaller text size, adjust as needed */
 }
 
 .refreshicon {
-  fill: #606060; /* Mid-dark grey for SVG icons */}
+  fill: navy; /* Mid-dark grey for SVG icons */}

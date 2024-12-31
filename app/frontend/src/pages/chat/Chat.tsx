@@ -2,10 +2,11 @@
 // Licensed under the MIT license.
 
 import { useRef, useState, useEffect } from "react";
-import { Checkbox, Panel, DefaultButton, TextField, SpinButton, Separator, Toggle, Label } from "@fluentui/react";
-import Switch from 'react-switch';
+import { Checkbox, Panel, DefaultButton, TextField, SpinButton, Separator, Toggle, Label, IPanelStyles, ISpinButtonStyles } from "@fluentui/react";
+import Switch from "react-switch";
 import { GlobeFilled, BuildingMultipleFilled, AddFilled, ChatSparkleFilled } from "@fluentui/react-icons";
-import { ITag } from '@fluentui/react/lib/Pickers';
+import { ITag } from "@fluentui/react/lib/Pickers";
+import { Typewriter } from "react-simple-typewriter";
 
 import styles from "./Chat.module.css";
 import rlbgstyles from "../../components/ResponseLengthButtonGroup/ResponseLengthButtonGroup.module.css";
@@ -27,6 +28,25 @@ import { InfoContent } from "../../components/InfoContent/InfoContent";
 import { FolderPicker } from "../../components/FolderPicker";
 import { TagPickerInline } from "../../components/TagPicker";
 import React from "react";
+import Sidebar from "../../components/Sidebar/Sidebar";
+
+const PanelStyles: Partial<IPanelStyles> ={
+    headerText:{
+        fontSize:'16px',
+        fontWeight:'bold',
+        color:'navy'
+    },
+    root:{
+        color: 'navy',
+    },
+}
+const SpinbuttonStyles: Partial<ISpinButtonStyles>={
+    label:{
+        fontSize:'12px'
+    }
+}
+
+
 
 const Chat = () => {
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
@@ -36,7 +56,7 @@ const Chat = () => {
     const [userPersona, setUserPersona] = useState<string>("analyst");
     const [systemPersona, setSystemPersona] = useState<string>("an Assistant");
     // Setting responseLength to 2048 by default, this will effect the default display of the ResponseLengthButtonGroup below.
-    // It must match a valid value of one of the buttons in the ResponseLengthButtonGroup.tsx file. 
+    // It must match a valid value of one of the buttons in the ResponseLengthButtonGroup.tsx file.
     // If you update the default value here, you must also update the default value in the onResponseLengthChange method.
     const [responseLength, setResponseLength] = useState<number>(2048);
 
@@ -81,10 +101,13 @@ const Chat = () => {
         }
     }
 
-    const makeApiRequest = async (question: string, approach: Approaches, 
-                                work_citation_lookup: { [key: string]: { citation: string; source_path: string; page_number: string } },
-                                web_citation_lookup: { [key: string]: { citation: string; source_path: string; page_number: string } },
-                                thought_chain: { [key: string]: string}) => {
+    const makeApiRequest = async (
+        question: string,
+        approach: Approaches,
+        work_citation_lookup: { [key: string]: { citation: string; source_path: string; page_number: string } },
+        web_citation_lookup: { [key: string]: { citation: string; source_path: string; page_number: string } },
+        thought_chain: { [key: string]: string }
+    ) => {
         lastQuestionRef.current = question;
         lastQuestionWorkCitationRef.current = work_citation_lookup;
         lastQuestionWebCitiationRef.current = web_citation_lookup;
@@ -116,7 +139,8 @@ const Chat = () => {
                     selectedFolders: selectedFolders.includes("selectAll") ? "All" : selectedFolders.length == 0 ? "All" : selectedFolders.join(","),
                     selectedTags: selectedTags.map(tag => tag.name).join(",")
                 },
-                citation_lookup: approach == Approaches.CompareWebWithWork ? web_citation_lookup : approach == Approaches.CompareWorkWithWeb ? work_citation_lookup : {},
+                citation_lookup:
+                    approach == Approaches.CompareWebWithWork ? web_citation_lookup : approach == Approaches.CompareWorkWithWeb ? work_citation_lookup : {},
                 thought_chain: thought_chain
             };
 
@@ -126,8 +150,8 @@ const Chat = () => {
                 data_points: [],
                 approach: approach,
                 thought_chain: {
-                    "work_response": "",
-                    "web_response": ""
+                    work_response: "",
+                    web_response: ""
                 },
                 work_citation_lookup: {},
                 web_citation_lookup: {}
@@ -178,8 +202,7 @@ const Chat = () => {
                         //do nothing
                         break;
                 }
-            }
-            else {
+            } else {
                 switch (node.value) {
                     case "1024":
                         node.className = `${rlbgstyles.buttonleft}`;
@@ -197,7 +220,7 @@ const Chat = () => {
             }
         }
         // the or value here needs to match the default value assigned to responseLength above.
-        setResponseLength(_ev.target.value as number || 2048)
+        setResponseLength((_ev.target.value as number) || 2048);
     };
 
     const onResponseTempChange = (_ev: any) => {
@@ -217,8 +240,7 @@ const Chat = () => {
                         //do nothing
                         break;
                 }
-            }
-            else {
+            } else {
                 switch (node.value) {
                     case "1.0":
                         node.className = `${rtbgstyles.buttonleft}`;
@@ -236,31 +258,29 @@ const Chat = () => {
             }
         }
         // the or value here needs to match the default value assigned to responseLength above.
-        setResponseTemp(_ev.target.value as number || 0.6)
+        setResponseTemp((_ev.target.value as number) || 0.6);
     };
 
     const onChatModeChange = (_ev: any) => {
         abortController?.abort();
-        const chatMode = _ev.target.value as ChatMode || ChatMode.WorkOnly;
+        const chatMode = (_ev.target.value as ChatMode) || ChatMode.WorkOnly;
         setChatMode(chatMode);
-        if (chatMode == ChatMode.WorkOnly)
-                setDefaultApproach(Approaches.ReadRetrieveRead);
-                setActiveApproach(Approaches.ReadRetrieveRead);
-        if (chatMode == ChatMode.WorkPlusWeb)
-            if (defaultApproach == Approaches.GPTDirect) 
-                setDefaultApproach(Approaches.ReadRetrieveRead)
-                setActiveApproach(Approaches.ReadRetrieveRead);
-        if (chatMode == ChatMode.Ungrounded)
-            setDefaultApproach(Approaches.GPTDirect)
-            setActiveApproach(Approaches.GPTDirect);
+        if (chatMode == ChatMode.WorkOnly) setDefaultApproach(Approaches.ReadRetrieveRead);
+        setActiveApproach(Approaches.ReadRetrieveRead);
+        if (chatMode == ChatMode.WorkPlusWeb) if (defaultApproach == Approaches.GPTDirect) setDefaultApproach(Approaches.ReadRetrieveRead);
+        setActiveApproach(Approaches.ReadRetrieveRead);
+        if (chatMode == ChatMode.Ungrounded) setDefaultApproach(Approaches.GPTDirect);
+        setActiveApproach(Approaches.GPTDirect);
         clearChat();
-    }
+    };
 
     const handleToggle = () => {
         defaultApproach == Approaches.ReadRetrieveRead ? setDefaultApproach(Approaches.ChatWebRetrieveRead) : setDefaultApproach(Approaches.ReadRetrieveRead);
-    }
+    };
 
-    useEffect(() => {fetchFeatureFlags()}, []);
+    useEffect(() => {
+        fetchFeatureFlags();
+    }, []);
     useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "smooth" }), [isLoading]);
 
     const onRetrieveCountChange = (_ev?: React.SyntheticEvent<HTMLElement, Event>, newValue?: string) => {
@@ -269,11 +289,11 @@ const Chat = () => {
 
     const onUserPersonaChange = (_ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
         setUserPersona(newValue || "");
-    }
+    };
 
     const onSystemPersonaChange = (_ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
         setSystemPersona(newValue || "");
-    }
+    };
 
     const onUseSuggestFollowupQuestionsChange = (_ev?: React.FormEvent<HTMLElement | HTMLInputElement>, checked?: boolean) => {
         setUseSuggestFollowupQuestions(!!checked);
@@ -307,19 +327,19 @@ const Chat = () => {
     };
 
     const onSelectedKeyChanged = (selectedFolders: string[]) => {
-        setSelectedFolders(selectedFolders)
+        setSelectedFolders(selectedFolders);
     };
 
     const onSelectedTagsChange = (selectedTags: ITag[]) => {
-        setSelectedTags(selectedTags)
-    }
+        setSelectedTags(selectedTags);
+    };
 
     useEffect(() => {
         // Hide Scrollbar for this page
-        document.body.classList.add('chat-overflow-hidden-body');
+        document.body.classList.add("chat-overflow-hidden-body");
         // Do not apply to other pages
         return () => {
-            document.body.classList.remove('chat-overflow-hidden-body');
+            document.body.classList.remove("chat-overflow-hidden-body");
         };
     }, []);
 
@@ -329,17 +349,24 @@ const Chat = () => {
             updatedAnswers[index] = [updatedAnswers[index][0], response];
             return updatedAnswers;
         });
-    }
+    };
 
     const removeAnswerAtIndex = (index: number) => {
         const newItems = answers.filter((item, idx) => idx !== index);
         setAnswers(newItems);
-    }
+    };
 
     return (
+        <div className={styles.chatApp}>
+
+            <div className="chatSideBar">
+                <Sidebar  defaultValue={activeChatMode} onChatModeChange={onChatModeChange} featureFlags={featureFlags}  />
+                {/* <Sidebar  /> */}
+            </div>
+        
         <div className={styles.container}>
             <div className={styles.subHeader}>
-                <ChatModeButtonGroup className="" defaultValue={activeChatMode} onClick={onChatModeChange} featureFlags={featureFlags} /> 
+                <ChatModeButtonGroup className="" defaultValue={activeChatMode} onClick={onChatModeChange} featureFlags={featureFlags} />
                 <div className={styles.commandsContainer}>
                     <ClearChatButton className={styles.commandButton} onClick={clearChat} disabled={!lastQuestionRef.current || isLoading} />
                     <SettingsButton className={styles.commandButton} onClick={() => setIsConfigPanelOpen(!isConfigPanelOpen)} />
@@ -350,65 +377,149 @@ const Chat = () => {
                 <div className={styles.chatContainer}>
                     {!lastQuestionRef.current ? (
                         <div className={styles.chatEmptyState}>
-                            {activeChatMode == ChatMode.WorkOnly ? 
+                            {activeChatMode == ChatMode.WorkOnly ? (
                                 <div>
-                                    <div className={styles.chatEmptyStateHeader}> 
-                                        <BuildingMultipleFilled fontSize={"100px"} primaryFill={"rgba(27, 74, 239, 1)"} aria-hidden="true" aria-label="Chat with your Work Data logo" />
-                                        </div>
-                                    <h1 className={styles.chatEmptyStateTitle}>Chat with your work data</h1>
+                                    <div className={styles.chatEmptyStateHeader}>
+                                        <BuildingMultipleFilled
+                                            fontSize={"100px"}
+                                            primaryFill={"navy"}
+                                            aria-hidden="true"
+                                            aria-label="Chat with your Work Data logo"
+                                        />
+                                    </div>
+                                    <h1 className={styles.chatEmptyStateTitle}>
+                                        <Typewriter
+                                            words={[
+                                                "Chat with your work data.",
+                                                "Upload and analyze your documents.",
+                                                "Ask questions about website URLs.",
+                                                "Analyze Your Work Data",
+                                                "Collaborate and share knowledge."
+                                            ]}
+                                            loop
+                                            cursor
+                                            cursorStyle="_"
+                                            typeSpeed={70}
+                                            deleteSpeed={30}
+                                            delaySpeed={1000}
+                                        />
+                                    </h1>
                                 </div>
-                            : activeChatMode == ChatMode.WorkPlusWeb ?
+                            ) : activeChatMode == ChatMode.WorkPlusWeb ? (
                                 <div>
-                                    <div className={styles.chatEmptyStateHeader}> 
-                                        <BuildingMultipleFilled fontSize={"80px"} primaryFill={"rgba(27, 74, 239, 1)"} aria-hidden="true" aria-label="Chat with your Work and Web Data logo" /><AddFilled fontSize={"50px"} primaryFill={"rgba(0, 0, 0, 0.7)"} aria-hidden="true" aria-label=""/><GlobeFilled fontSize={"80px"} primaryFill={"rgba(24, 141, 69, 1)"} aria-hidden="true" aria-label="" />
+                                    <div className={styles.chatEmptyStateHeader}>
+                                        <BuildingMultipleFilled
+                                            fontSize={"80px"}
+                                            primaryFill={"navy"}
+                                            aria-hidden="true"
+                                            aria-label="Chat with your Work and Web Data logo"
+                                        />
+                                        <AddFilled fontSize={"40px"} primaryFill={"navy"} aria-hidden="true" aria-label="" />
+                                        <GlobeFilled fontSize={"80px"} primaryFill={"navy"} aria-hidden="true" aria-label="" />
                                     </div>
                                     <h1 className={styles.chatEmptyStateTitle}>Chat with your work and web data</h1>
                                 </div>
-                            : //else Ungrounded
+                            ) : (
+                                //else Ungrounded
                                 <div>
-                                    <div className={styles.chatEmptyStateHeader}> 
-                                        <ChatSparkleFilled fontSize={"80px"} primaryFill={"rgba(0, 0, 0, 0.35)"} aria-hidden="true" aria-label="Chat logo" />
+                                    <div className={styles.chatEmptyStateHeader}>
+                                        <ChatSparkleFilled fontSize={"80px"} primaryFill={"navy"} aria-hidden="true" aria-label="Chat logo" />
                                     </div>
                                     <h1 className={styles.chatEmptyStateTitle}>Chat directly with a LLM</h1>
                                 </div>
-                            }
+                            )}
                             <span className={styles.chatEmptyObjectives}>
-                                <i>Information Assistant uses AI. Check for mistakes.   </i><a href="https://github.com/microsoft/PubSec-Info-Assistant/blob/main/docs/transparency.md" target="_blank" rel="noopener noreferrer">Transparency Note</a>
+                                <i>Information Assistant uses AI. Check for mistakes. </i>
+                                <a
+                                    href="https://github.com/microsoft/PubSec-Info-Assistant/blob/main/docs/transparency.md"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Transparency Note
+                                </a>
                             </span>
-                            {activeChatMode != ChatMode.Ungrounded &&
+                            {activeChatMode != ChatMode.Ungrounded && (
                                 <div>
                                     <h2 className={styles.chatEmptyStateSubtitle}>Ask anything or try an example</h2>
                                     <ExampleList onExampleClicked={onExampleClicked} />
                                 </div>
-                            }
+                            )}
                         </div>
                     ) : (
                         <div className={styles.chatMessageStream}>
                             {answers.map((answer, index) => (
                                 <div key={index}>
-                                    <UserChatMessage
-                                        message={answer[0]}
-                                        approach={answer[1].approach}
-                                    />
+                                    <UserChatMessage message={answer[0]} approach={answer[1].approach} />
                                     <div className={styles.chatMessageGpt}>
                                         <Answer
                                             key={index}
                                             answer={answer[1]}
                                             answerStream={answerStream}
-                                            setError={(error) => {setError(error); removeAnswerAtIndex(index); }}
-                                            setAnswer={(response) => updateAnswerAtIndex(index, response)}
+                                            setError={error => {
+                                                setError(error);
+                                                removeAnswerAtIndex(index);
+                                            }}
+                                            setAnswer={response => updateAnswerAtIndex(index, response)}
                                             isSelected={selectedAnswer === index && activeAnalysisPanelTab !== undefined}
                                             onCitationClicked={(c, s, p) => onShowCitation(c, s, p, index)}
                                             onThoughtProcessClicked={() => onToggleTab(AnalysisPanelTabs.ThoughtProcessTab, index)}
                                             onSupportingContentClicked={() => onToggleTab(AnalysisPanelTabs.SupportingContentTab, index)}
-                                            onFollowupQuestionClicked={q => makeApiRequest(q, answer[1].approach, answer[1].work_citation_lookup, answer[1].web_citation_lookup, answer[1].thought_chain)}
+                                            onFollowupQuestionClicked={q =>
+                                                makeApiRequest(
+                                                    q,
+                                                    answer[1].approach,
+                                                    answer[1].work_citation_lookup,
+                                                    answer[1].web_citation_lookup,
+                                                    answer[1].thought_chain
+                                                )
+                                            }
                                             showFollowupQuestions={useSuggestFollowupQuestions && answers.length - 1 === index}
                                             onAdjustClick={() => setIsConfigPanelOpen(!isConfigPanelOpen)}
-                                            onRegenerateClick={() => makeApiRequest(answers[index][0], answer[1].approach, answer[1].work_citation_lookup, answer[1].web_citation_lookup, answer[1].thought_chain)}
-                                            onWebSearchClicked={() => makeApiRequest(answers[index][0], Approaches.ChatWebRetrieveRead, answer[1].work_citation_lookup, answer[1].web_citation_lookup, answer[1].thought_chain)}
-                                            onWebCompareClicked={() => makeApiRequest(answers[index][0], Approaches.CompareWorkWithWeb, answer[1].work_citation_lookup, answer[1].web_citation_lookup, answer[1].thought_chain)}
-                                            onRagCompareClicked={() => makeApiRequest(answers[index][0], Approaches.CompareWebWithWork, answer[1].work_citation_lookup, answer[1].web_citation_lookup, answer[1].thought_chain)}
-                                            onRagSearchClicked={() => makeApiRequest(answers[index][0], Approaches.ReadRetrieveRead, answer[1].work_citation_lookup, answer[1].web_citation_lookup, answer[1].thought_chain)}
+                                            onRegenerateClick={() =>
+                                                makeApiRequest(
+                                                    answers[index][0],
+                                                    answer[1].approach,
+                                                    answer[1].work_citation_lookup,
+                                                    answer[1].web_citation_lookup,
+                                                    answer[1].thought_chain
+                                                )
+                                            }
+                                            onWebSearchClicked={() =>
+                                                makeApiRequest(
+                                                    answers[index][0],
+                                                    Approaches.ChatWebRetrieveRead,
+                                                    answer[1].work_citation_lookup,
+                                                    answer[1].web_citation_lookup,
+                                                    answer[1].thought_chain
+                                                )
+                                            }
+                                            onWebCompareClicked={() =>
+                                                makeApiRequest(
+                                                    answers[index][0],
+                                                    Approaches.CompareWorkWithWeb,
+                                                    answer[1].work_citation_lookup,
+                                                    answer[1].web_citation_lookup,
+                                                    answer[1].thought_chain
+                                                )
+                                            }
+                                            onRagCompareClicked={() =>
+                                                makeApiRequest(
+                                                    answers[index][0],
+                                                    Approaches.CompareWebWithWork,
+                                                    answer[1].work_citation_lookup,
+                                                    answer[1].web_citation_lookup,
+                                                    answer[1].thought_chain
+                                                )
+                                            }
+                                            onRagSearchClicked={() =>
+                                                makeApiRequest(
+                                                    answers[index][0],
+                                                    Approaches.ReadRetrieveRead,
+                                                    answer[1].work_citation_lookup,
+                                                    answer[1].web_citation_lookup,
+                                                    answer[1].thought_chain
+                                                )
+                                            }
                                             chatMode={activeChatMode}
                                         />
                                     </div>
@@ -416,25 +527,48 @@ const Chat = () => {
                             ))}
                             {error ? (
                                 <>
-                                    <UserChatMessage message={lastQuestionRef.current} approach={activeApproach}/>
+                                    <UserChatMessage message={lastQuestionRef.current} approach={activeApproach} />
                                     <div className={styles.chatMessageGptMinWidth}>
-                                        <AnswerError error={error.toString()} onRetry={() => makeApiRequest(lastQuestionRef.current, activeApproach, lastQuestionWorkCitationRef.current, lastQuestionWebCitiationRef.current, lastQuestionThoughtChainRef.current)} />
+                                        <AnswerError
+                                            error={error.toString()}
+                                            onRetry={() =>
+                                                makeApiRequest(
+                                                    lastQuestionRef.current,
+                                                    activeApproach,
+                                                    lastQuestionWorkCitationRef.current,
+                                                    lastQuestionWebCitiationRef.current,
+                                                    lastQuestionThoughtChainRef.current
+                                                )
+                                            }
+                                        />
                                     </div>
                                 </>
                             ) : null}
                             <div ref={chatMessageStreamEnd} />
                         </div>
                     )}
-                    
+
                     <div className={styles.chatInput}>
                         {activeChatMode == ChatMode.WorkPlusWeb && (
-                            <div className={styles.chatInputWarningMessage}> 
-                                {defaultApproach == Approaches.ReadRetrieveRead && 
-                                    <div>Questions will be answered by default from Work <BuildingMultipleFilled fontSize={"20px"} primaryFill={"rgba(27, 74, 239, 1)"} aria-hidden="true" aria-label="Work Data" /></div>}
-                                {defaultApproach == Approaches.ChatWebRetrieveRead && 
-                                    <div>Questions will be answered by default from Web <GlobeFilled fontSize={"20px"} primaryFill={"rgba(24, 141, 69, 1)"} aria-hidden="true" aria-label="Web Data" /></div>
-                                }
-                            </div> 
+                            <div className={styles.chatInputWarningMessage}>
+                                {defaultApproach == Approaches.ReadRetrieveRead && (
+                                    <div>
+                                        Questions will be answered by default from Work{" "}
+                                        <BuildingMultipleFilled
+                                            fontSize={"20px"}
+                                            primaryFill={"rgba(27, 74, 239, 1)"}
+                                            aria-hidden="true"
+                                            aria-label="Work Data"
+                                        />
+                                    </div>
+                                )}
+                                {defaultApproach == Approaches.ChatWebRetrieveRead && (
+                                    <div>
+                                        Questions will be answered by default from Web{" "}
+                                        <GlobeFilled fontSize={"20px"} primaryFill={"rgba(24, 141, 69, 1)"} aria-hidden="true" aria-label="Web Data" />
+                                    </div>
+                                )}
+                            </div>
                         )}
                         <QuestionInput
                             clearOnSend
@@ -464,7 +598,8 @@ const Chat = () => {
                 )}
 
                 <Panel
-                    headerText="Configure answer generation"
+                    headerText="Configure Answer Generation"
+                    styles={PanelStyles}
                     isOpen={isConfigPanelOpen}
                     isBlocking={false}
                     onDismiss={() => setIsConfigPanelOpen(false)}
@@ -472,60 +607,75 @@ const Chat = () => {
                     onRenderFooterContent={() => <DefaultButton onClick={() => setIsConfigPanelOpen(false)}>Close</DefaultButton>}
                     isFooterAtBottom={true}
                 >
-                    {activeChatMode == ChatMode.WorkPlusWeb &&
+                    {activeChatMode == ChatMode.WorkPlusWeb && (
                         <div>
                             <Label>Use this datasource to answer Questions by default:</Label>
                             <div className={styles.defaultApproachSwitch}>
-                                <div className={styles.defaultApproachWebOption} onClick={handleToggle}>Web</div>
-                                <Switch onChange={handleToggle} checked={defaultApproach == Approaches.ReadRetrieveRead} uncheckedIcon={true} checkedIcon={true} onColor="#1B4AEF" offColor="#188d45"/>
-                                <div className={styles.defaultApproachWorkOption} onClick={handleToggle}>Work</div>
+                                <div className={styles.defaultApproachWebOption} onClick={handleToggle}>
+                                    Web
+                                </div>
+                                <Switch
+                                    onChange={handleToggle}
+                                    checked={defaultApproach == Approaches.ReadRetrieveRead}
+                                    uncheckedIcon={true}
+                                    checkedIcon={true}
+                                    onColor="#1B4AEF"
+                                    offColor="#188d45"
+                                />
+                                <div className={styles.defaultApproachWorkOption} onClick={handleToggle}>
+                                    Work
+                                </div>
                             </div>
                         </div>
-                    }
-                    {activeChatMode != ChatMode.Ungrounded &&
+                    )}
+                    {activeChatMode != ChatMode.Ungrounded && (
                         <SpinButton
                             className={styles.chatSettingsSeparator}
-                            label="Retrieve this many documents from search:"
+                            label="Document to retrieve from Search"
+                           styles={SpinbuttonStyles}
                             min={1}
                             max={50}
                             defaultValue={retrieveCount.toString()}
                             onChange={onRetrieveCountChange}
                         />
-                    }
-                    {activeChatMode != ChatMode.Ungrounded &&
+                    )}
+                    {activeChatMode != ChatMode.Ungrounded && (
                         <Checkbox
                             className={styles.chatSettingsSeparator}
                             checked={useSuggestFollowupQuestions}
                             label="Suggest follow-up questions"
                             onChange={onUseSuggestFollowupQuestionsChange}
                         />
-                    }
+                    )}
                     <TextField className={styles.chatSettingsSeparator} defaultValue={userPersona} label="User Persona" onChange={onUserPersonaChange} />
                     <TextField className={styles.chatSettingsSeparator} defaultValue={systemPersona} label="System Persona" onChange={onSystemPersonaChange} />
                     <ResponseLengthButtonGroup className={styles.chatSettingsSeparator} onClick={onResponseLengthChange} defaultValue={responseLength} />
                     <ResponseTempButtonGroup className={styles.chatSettingsSeparator} onClick={onResponseTempChange} defaultValue={responseTemp} />
-                    {activeChatMode != ChatMode.Ungrounded &&
+                    {activeChatMode != ChatMode.Ungrounded && (
                         <div>
                             <Separator className={styles.chatSettingsSeparator}>Filter Search Results by</Separator>
                             <FolderPicker allowFolderCreation={false} onSelectedKeyChange={onSelectedKeyChanged} preSelectedKeys={selectedFolders} />
                             <TagPickerInline allowNewTags={false} onSelectedTagsChange={onSelectedTagsChange} preSelectedTags={selectedTags} />
                         </div>
-                    }
+                    )}
                 </Panel>
 
                 <Panel
                     headerText="Information"
                     isOpen={isInfoPanelOpen}
                     isBlocking={false}
+                    styles={PanelStyles}
                     onDismiss={() => setIsInfoPanelOpen(false)}
                     closeButtonAriaLabel="Close"
                     onRenderFooterContent={() => <DefaultButton onClick={() => setIsInfoPanelOpen(false)}>Close</DefaultButton>}
-                    isFooterAtBottom={true}                >
+                    isFooterAtBottom={true}
+                >
                     <div className={styles.resultspanel}>
                         <InfoContent />
                     </div>
                 </Panel>
             </div>
+        </div>
         </div>
     );
 };

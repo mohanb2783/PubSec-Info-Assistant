@@ -44,19 +44,33 @@ export const FolderPicker = ({allowFolderCreation, onSelectedKeyChange, preSelec
         option =>
           (option.itemType === SelectableOptionMenuItemType.Normal || option.itemType === undefined) && !option.disabled,
       );
-    const comboBoxStyles: Partial<IComboBoxStyles> = { root: { maxWidth: 300 } };
+    const comboBoxStyles: Partial<IComboBoxStyles> = { root: { maxWidth: 300,} };
     const hostStyles: Partial<ITooltipHostStyles> = { root: { display: 'inline-block' } };
-    const addFolderIcon: IIconProps = { iconName: 'Add' };
+
+    const actionButtonStyles: Partial<IComboBoxStyles> = { root: { color:'white'} };   
+    const addFolderIcon: IIconProps = { iconName: 'Add', styles: { root: { color: 'white' } } };
 
     allowNewFolders = allowFolderCreation as boolean;
 
     const teachingBubbleStyles: Partial<ITeachingBubbleStyles> = {
+        
         content: {
-            background: "#d3d3d3",
-            borderColor: "#696969"
+            background: "#F8f8ff",
+            borderColor: "#696969",
+            padding: "20px",
+               
+        },
+        closeButton: {
+            color:'black'
+        },
+        primaryButton: {
+            background:'navy',
+            color:'white',
+            borderRadius: '5px',
         },
         headline: {
-            color: "#696969"
+            color: "navy",
+            textAlign: "center",
         },
     }
     
@@ -78,7 +92,7 @@ export const FolderPicker = ({allowFolderCreation, onSelectedKeyChange, preSelec
     };
 
     const examplePrimaryButtonProps: IButtonProps = {
-        children: 'Create folder',
+        children: 'Create Repository',
         onClick: teachingBubblePrimaryButtonClick,
     };
 
@@ -178,11 +192,39 @@ export const FolderPicker = ({allowFolderCreation, onSelectedKeyChange, preSelec
 
     return (
         <div className={hide? styles.hide : styles.folderArea}>
+        
+<div className={styles.folderandcreate}>
+{allowNewFolders ? (
+                <div className={styles.actionButton}>
+                    <ActionButton
+                        iconProps={addFolderIcon} 
+                        styles={actionButtonStyles}
+                        allowDisabledFocus
+                        onClick={toggleTeachingBubbleVisible}
+                        id={buttonId}>
+                         Repository
+                    </ActionButton>
+                    {teachingBubbleVisible && (
+                        <TeachingBubble
+                        target={`#${buttonId}`}
+                        primaryButtonProps={examplePrimaryButtonProps}
+                        onDismiss={toggleTeachingBubbleVisible}
+                        headline="Create Repository"
+                        calloutProps={{ directionalHint: DirectionalHint.topCenter }}
+                        styles={teachingBubbleStyles}
+                        hasCloseButton={true}
+                        >
+                        <TextField id={textFieldId} label='Repository Name:' required={true} styles={getStyles}/>
+                        </TeachingBubble>
+                    )}
+                </div>) : ""}
+              
+          
             <div className={styles.folderSelection}>
                 <ComboBox
                     multiSelect={allowNewFolders? false : true}
                     selectedKey={selectedKeys}
-                    label={allowNewFolders? "Folder Selection" : "Folder Selection (Select multiple folders)"}
+                    label={allowNewFolders? "Knowledge Asset" : "Asset Selection (Select multiple assets)"}
                     options={options}
                     onChange={onChange}
                     styles={comboBoxStyles}
@@ -193,29 +235,9 @@ export const FolderPicker = ({allowFolderCreation, onSelectedKeyChange, preSelec
                     <Info16Regular></Info16Regular>
                 </TooltipHost>
             </div>
-            {allowNewFolders ? (
-                <div className={styles.actionButton}>
-                    <ActionButton
-                        iconProps={addFolderIcon} 
-                        allowDisabledFocus
-                        onClick={toggleTeachingBubbleVisible}
-                        id={buttonId}>
-                        Create new folder
-                    </ActionButton>
-                    {teachingBubbleVisible && (
-                        <TeachingBubble
-                        target={`#${buttonId}`}
-                        primaryButtonProps={examplePrimaryButtonProps}
-                        onDismiss={toggleTeachingBubbleVisible}
-                        headline="Create new folder"
-                        calloutProps={{ directionalHint: DirectionalHint.topCenter }}
-                        styles={teachingBubbleStyles}
-                        hasCloseButton={true}
-                        >
-                        <TextField id={textFieldId} label='Folder Name:' required={true} styles={getStyles}/>
-                        </TeachingBubble>
-                    )}
-                </div>) : ""}
+            </div>
+            
+                
         </div>
     );
 };

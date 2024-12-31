@@ -67,7 +67,7 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, onAd
         <Stack>
             <Stack.Item>
             <Stack horizontal className={styles.questionInputContainer}>
-                {showClearChat ? (
+                {/* {showClearChat ? (
                     <div className={styles.questionClearButtonsContainer}>
                         <div
                             className={styles.questionClearChatButton}
@@ -81,7 +81,7 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, onAd
                         </div>
                     </div>
                 )
-                : null}
+                : null} */}
                 <TextField
                     className={styles.questionInputTextArea}
                     placeholder={placeholder}

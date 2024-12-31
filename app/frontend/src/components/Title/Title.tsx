@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import React, { useEffect, useState } from  "react";
+import React, { useEffect, useState } from "react";
 import { ApplicationTitle, getApplicationTitle } from "../../api";
 
 export const Title = () => {
@@ -10,8 +10,6 @@ export const Title = () => {
     async function fetchApplicationTitle() {
         console.log("fetch Application Title");
         try {
-
-
             const v = await getApplicationTitle();
             if (!v.APPLICATION_TITLE) {
                 return null;
@@ -28,5 +26,11 @@ export const Title = () => {
         fetchApplicationTitle();
     }, []);
 
-    return (<>{Title?.APPLICATION_TITLE}</>);
+    return (
+        <>
+         
+            {/* This is the real logic that will get the title from the api above is just for testing purposes */}
+            {Title?.APPLICATION_TITLE?Title?.APPLICATION_TITLE:"Information Assistant for the Web"}
+        </>
+    );
 };

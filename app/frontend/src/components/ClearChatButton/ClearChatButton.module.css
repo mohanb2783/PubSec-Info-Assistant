@@ -6,6 +6,7 @@
     align-items: center;
     gap: 6px;
     cursor: pointer;
+color: navy;
 }
 
 .disabled {

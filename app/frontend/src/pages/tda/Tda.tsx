@@ -52,7 +52,7 @@ const EXAMPLES: ExampleModel[] = [
     { text: "How many rows are there?", value: "How many rows are there?" },
     { text: "What are the data types of each column?", value: "What are the data types of each column?" },
     { text: "Are there any missing values in the dataset?", value: "Are there any missing values in the dataset?" },
-    { text: "What are the summary statistics for categorical data?", value: "What are the summary statistics for categorical data?" }
+    // { text: "What are the summary statistics for categorical data?", value: "What are the summary statistics for categorical data?" }
 ];
 
 interface Props {
@@ -304,8 +304,8 @@ const handleCloseEvent = () => {
 
   return (<div className={cstyle.contentArea} >
     <div className={cstyle.App} >
-    <TableSearchFilled fontSize={"6rem"} primaryFill={"#7719aa"} aria-hidden="true" aria-label="Supported File Types" />
-    <h1 className={cstyle.EmptyStateTitle}>
+    <TableSearchFilled fontSize={"6rem"} primaryFill={"navy"} aria-hidden="true" aria-label="Supported File Types" />
+    <h1 className={cstyle.chatEmptyStateTitle}>
       Tabular Data Assistant
     </h1>
     <span className={styles.chatEmptyObjectives}>
@@ -314,10 +314,10 @@ const handleCloseEvent = () => {
     
     
     <div className={cstyle.centeredContainer}>
-    <h2 className={styles.EmptyStateTitle}>Supported file types</h2>
+    <h2 className={styles.EmptyStateTitle}>Supported File Types</h2>
 
 
-    <DocumentDataFilled fontSize={"40px"} primaryFill={"#7719aa"} aria-hidden="true" aria-label="Data" />
+    <DocumentDataFilled fontSize={"40px"} primaryFill={"navy"} aria-hidden="true" aria-label="Data" />
             <span className={cstyle.EmptyObjectivesListItemText}><b>Data</b><br />
                 csv<br />
             </span>
@@ -364,8 +364,8 @@ const handleCloseEvent = () => {
         </button>
       ) : null}
     </div>
-    
-    <p>Select an example query:</p>
+    <div className={cstyle.exampleSuggestions}>
+    <p className={cstyle.exampleSuggestionsHeading}>Select an example query:</p>
     <div >
         <ul className={estyles.examplesNavList}>
             {EXAMPLES.map((x, i) => (
@@ -375,19 +375,22 @@ const handleCloseEvent = () => {
             ))}
         </ul>
     <div >
+    </div>
     
     <br></br>
-    <p>Ask a question about your CSV:</p>
+    
     <input
       className={cstyle.inputField}
       type="text"
-      placeholder="Enter your query"
+      placeholder="Ask a question about your data"
       value={inputValue}
       onChange={(e) => setInputValue(e.target.value)}
     />
      <div className={cstyle.buttonContainer}>
-    <Button variant="secondary" onClick={handleAnalysis}>Here is my analysis</Button>
-    <Button variant="secondary" onClick={handleAnswer}>Show me the answer</Button>
+    {/* <Button variant="primary" onClick={handleAnalysis}>Here is my analysis</Button>
+    <Button variant="primary" onClick={handleAnswer}>Show me the answer</Button> */}
+    <button className={cstyle.analysisButtons}>Here is my Analysis</button>
+    <button className={cstyle.analysisButtons}>Show Me The Answer</button>
     </div>
     { (
       <div style={{width: '100%'}}>

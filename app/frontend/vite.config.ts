@@ -4,9 +4,11 @@ import postcssNesting from 'postcss-nesting';
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 
+// have to add nodePolyfills to the plugins array
+
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [react(), nodePolyfills()],
+    plugins: [react(),nodePolyfills()],
     build: {
         outDir: "../backend/static",
         emptyOutDir: true,

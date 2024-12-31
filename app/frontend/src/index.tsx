@@ -14,16 +14,19 @@ import Chat from "./pages/chat/Chat";
 import Content from "./pages/content/Content";
 import Tutor from "./pages/tutor/Tutor";
 import { Tda } from "./pages/tda/Tda";
+import HomePage from "./pages/Homepage/HomePage";
 
 initializeIcons();
 
 export default function App() {
     const [toggle, setToggle] = React.useState('Work');
     return (
+        <>
         <HashRouter>
             <Routes>
                 <Route path="/" element={<Layout />}>
-                    <Route index element={<Chat />} />
+                    <Route index element={<HomePage />} />
+                     <Route path="chat" element={<Chat />}/>
                     <Route path="content" element={<Content />} />
                     <Route path="*" element={<NoPage />} />
                     <Route path="tutor" element={<Tutor />} />
@@ -31,6 +34,7 @@ export default function App() {
             </Route>
             </Routes>
         </HashRouter>    
+        </>
     );
 }
 

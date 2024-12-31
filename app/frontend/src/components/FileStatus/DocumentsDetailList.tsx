@@ -403,15 +403,15 @@ export const DocumentsDetailList = ({ items, onFilesSorted, onRefresh }: Props) 
         <div>
             <div className={styles.buttonsContainer}>
                 <div className={`${styles.refresharea} ${styles.divSpacing}`} onClick={onRefresh} aria-label=" Refresh">
-                    <ArrowClockwise24Regular className={styles.refreshicon} />
+                    <ArrowClockwise24Regular color="navy" className={styles.refreshicon} />
                     <span className={`${styles.refreshtext} ${styles.centeredText}`}>Refresh</span>
                 </div>        
                 <div className={`${styles.refresharea} ${styles.divSpacing}`} onClick={handleDeleteClick} aria-label=" Delete">
-                    <Delete24Regular className={styles.refreshicon} />
+                    <Delete24Regular color="navy" className={styles.refreshicon} />
                     <span className={`${styles.refreshtext} ${styles.centeredText}`}>Delete</span>
                 </div>
                 <div className={`${styles.refresharea} ${styles.divSpacing}`} onClick={handleResubmitClick} aria-label=" Resubmit">
-                    <Send24Regular className={styles.refreshicon} />
+                    <Send24Regular color="navy" className={styles.refreshicon} />
                     <span className={`${styles.refreshtext} ${styles.centeredText}`}>Resubmit</span>
                 </div>
             </div>
